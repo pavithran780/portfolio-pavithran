@@ -1,9 +1,10 @@
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Calendar, MapPin, Award } from 'lucide-react';
+import { Calendar, MapPin, Award, ExternalLink } from 'lucide-react';
 
 const Education = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [visibleItems, setVisibleItems] = useState<number[]>([]);
   const sectionRef = useRef<HTMLDivElement>(null);
 
   const education = [
@@ -12,41 +13,83 @@ const Education = () => {
       institution: 'Stanford University',
       location: 'Stanford, CA',
       period: '2018 - 2020',
-      description: 'Specialized in Software Engineering and Machine Learning',
-      gpa: '3.9/4.0'
+      description: 'Specialized in Software Engineering and Machine Learning with focus on AI algorithms and distributed systems.',
+      gpa: '3.9/4.0',
+      achievements: ['Dean\'s List', 'Research Assistant', 'Published 2 papers']
     },
     {
       degree: 'Bachelor of Computer Science',
       institution: 'UC Berkeley',
       location: 'Berkeley, CA',
       period: '2014 - 2018',
-      description: 'Major in Computer Science with focus on Web Development',
-      gpa: '3.8/4.0'
+      description: 'Major in Computer Science with focus on Web Development and Database Systems.',
+      gpa: '3.8/4.0',
+      achievements: ['Summa Cum Laude', 'CS Honor Society', 'Teaching Assistant']
     }
   ];
 
   const certifications = [
-    'AWS Certified Developer',
-    'Google Cloud Professional',
-    'MongoDB Certified Developer',
-    'React Developer Certification'
+    {
+      name: 'AWS Certified Solutions Architect',
+      issuer: 'Amazon Web Services',
+      date: '2023',
+      image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=300&h=200&fit=crop',
+      credentialId: 'AWS-SA-2023-001'
+    },
+    {
+      name: 'Google Cloud Professional Developer',
+      issuer: 'Google Cloud',
+      date: '2023',
+      image: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=300&h=200&fit=crop',
+      credentialId: 'GCP-PD-2023-002'
+    },
+    {
+      name: 'MongoDB Certified Developer',
+      issuer: 'MongoDB University',
+      date: '2022',
+      image: 'https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?w=300&h=200&fit=crop',
+      credentialId: 'MDB-DEV-2022-003'
+    },
+    {
+      name: 'React Developer Certification',
+      issuer: 'Meta',
+      date: '2022',
+      image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=300&h=200&fit=crop',
+      credentialId: 'META-REACT-2022-004'
+    }
   ];
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = parseInt(entry.target.getAttribute('data-index') || '0');
+            setVisibleItems(prev => [...prev, index]);
+          }
+        });
       },
       { threshold: 0.1 }
     );
 
+    const timelineItems = document.querySelectorAll('.timeline-item');
+    timelineItems.forEach((item) => observer.observe(item));
+
     if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+      const mainObserver = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+          }
+        },
+        { threshold: 0.1 }
+      );
+      mainObserver.observe(sectionRef.current);
     }
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
   return (
@@ -59,57 +102,96 @@ const Education = () => {
             Education & Certifications
           </h2>
           
-          <div className="grid lg:grid-cols-2 gap-12">
-            {/* Education */}
-            <div>
-              <h3 className="text-2xl font-semibold mb-8 text-white">Education</h3>
-              <div className="space-y-6">
-                {education.map((edu, index) => (
-                  <div
-                    key={index}
-                    className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-lg p-6 hover:border-cyan-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/10"
-                    style={{ animationDelay: `${index * 200}ms` }}
-                  >
-                    <div className="flex items-start justify-between mb-4">
-                      <div>
-                        <h4 className="text-xl font-semibold text-white mb-2">{edu.degree}</h4>
-                        <p className="text-cyan-400 font-medium">{edu.institution}</p>
+          {/* Education Timeline */}
+          <div className="mb-20">
+            <h3 className="text-2xl font-semibold mb-12 text-white text-center">Educational Journey</h3>
+            <div className="relative">
+              {/* Timeline Line */}
+              <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-cyan-400 to-purple-500 rounded-full"></div>
+              
+              {education.map((edu, index) => (
+                <div
+                  key={index}
+                  className={`timeline-item relative flex items-center mb-12 ${
+                    index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'
+                  } ${
+                    visibleItems.includes(index) 
+                      ? 'opacity-100 translate-y-0' 
+                      : 'opacity-0 translate-y-10'
+                  } transition-all duration-700`}
+                  data-index={index}
+                  style={{ transitionDelay: `${index * 200}ms` }}
+                >
+                  {/* Timeline Node */}
+                  <div className="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-gradient-to-r from-cyan-400 to-purple-500 rounded-full border-4 border-gray-900 z-10"></div>
+                  
+                  {/* Content Card */}
+                  <div className={`w-5/12 ${index % 2 === 0 ? 'mr-auto pr-8' : 'ml-auto pl-8'}`}>
+                    <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-lg p-6 hover:border-cyan-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/10">
+                      <div className="flex items-start justify-between mb-4">
+                        <div>
+                          <h4 className="text-xl font-semibold text-white mb-2">{edu.degree}</h4>
+                          <p className="text-cyan-400 font-medium">{edu.institution}</p>
+                        </div>
+                        <div className="text-right">
+                          <div className="flex items-center text-gray-400 mb-1">
+                            <Calendar size={16} className="mr-1" />
+                            {edu.period}
+                          </div>
+                          <div className="flex items-center text-gray-400">
+                            <MapPin size={16} className="mr-1" />
+                            {edu.location}
+                          </div>
+                        </div>
                       </div>
-                      <div className="text-right">
-                        <div className="flex items-center text-gray-400 mb-1">
-                          <Calendar size={16} className="mr-1" />
-                          {edu.period}
-                        </div>
-                        <div className="flex items-center text-gray-400">
-                          <MapPin size={16} className="mr-1" />
-                          {edu.location}
-                        </div>
+                      <p className="text-gray-300 mb-3">{edu.description}</p>
+                      <div className="text-sm text-green-400 mb-3">GPA: {edu.gpa}</div>
+                      <div className="flex flex-wrap gap-2">
+                        {edu.achievements.map((achievement, i) => (
+                          <span key={i} className="bg-purple-600/20 text-purple-300 px-2 py-1 rounded-full text-xs">
+                            {achievement}
+                          </span>
+                        ))}
                       </div>
                     </div>
-                    <p className="text-gray-300 mb-3">{edu.description}</p>
-                    <div className="text-sm text-green-400">GPA: {edu.gpa}</div>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
+          </div>
 
-            {/* Certifications */}
-            <div>
-              <h3 className="text-2xl font-semibold mb-8 text-white">Certifications</h3>
-              <div className="space-y-4">
-                {certifications.map((cert, index) => (
-                  <div
-                    key={index}
-                    className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-lg p-4 hover:border-purple-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10 hover:scale-105"
-                    style={{ animationDelay: `${index * 150}ms` }}
-                  >
-                    <div className="flex items-center">
-                      <Award className="text-purple-400 mr-3" size={20} />
-                      <span className="text-white font-medium">{cert}</span>
+          {/* Certifications */}
+          <div>
+            <h3 className="text-2xl font-semibold mb-8 text-white text-center">Professional Certifications</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {certifications.map((cert, index) => (
+                <div
+                  key={index}
+                  className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-lg overflow-hidden hover:border-purple-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10 hover:scale-105 group"
+                  style={{ animationDelay: `${index * 150}ms` }}
+                >
+                  <div className="relative overflow-hidden">
+                    <img 
+                      src={cert.image} 
+                      alt={cert.name}
+                      className="w-full h-32 object-cover group-hover:scale-110 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-60"></div>
+                    <div className="absolute top-2 right-2">
+                      <ExternalLink size={16} className="text-white" />
                     </div>
                   </div>
-                ))}
-              </div>
+                  <div className="p-4">
+                    <div className="flex items-center mb-2">
+                      <Award className="text-purple-400 mr-2" size={16} />
+                      <span className="text-purple-400 text-xs">{cert.date}</span>
+                    </div>
+                    <h4 className="text-white font-medium mb-1 text-sm">{cert.name}</h4>
+                    <p className="text-gray-400 text-xs mb-2">{cert.issuer}</p>
+                    <p className="text-gray-500 text-xs">ID: {cert.credentialId}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>

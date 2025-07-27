@@ -1,66 +1,85 @@
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Github, ExternalLink, Filter } from 'lucide-react';
+import { Github, ExternalLink, Star, GitFork, Eye } from 'lucide-react';
 
 const Projects = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [activeFilter, setActiveFilter] = useState('All');
+  const [hoveredProject, setHoveredProject] = useState<string | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
 
   const projects = [
     {
+      id: 'ecommerce',
       title: 'E-Commerce Platform',
-      description: 'A full-stack e-commerce solution with React, Node.js, and MongoDB. Features include user authentication, payment integration, and admin dashboard.',
-      image: '/placeholder.svg',
-      technologies: ['React', 'Node.js', 'MongoDB', 'Stripe'],
+      description: 'A comprehensive e-commerce solution with React, Node.js, and MongoDB. Features include user authentication, payment integration, admin dashboard, and real-time notifications.',
+      image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=500&h=300&fit=crop',
+      technologies: ['React', 'Node.js', 'MongoDB', 'Stripe', 'Socket.io'],
       category: 'Web',
       github: '#',
-      live: '#'
+      live: '#',
+      featured: true,
+      stats: { stars: 234, forks: 56, views: 1200 }
     },
     {
+      id: 'task-manager',
       title: 'Task Management App',
-      description: 'A productivity app built with React Native and Firebase. Real-time collaboration, push notifications, and offline support.',
-      image: '/placeholder.svg',
-      technologies: ['React Native', 'Firebase', 'Redux'],
+      description: 'A productivity app built with React Native and Firebase. Features real-time collaboration, push notifications, offline support, and advanced analytics.',
+      image: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=500&h=300&fit=crop',
+      technologies: ['React Native', 'Firebase', 'Redux', 'TypeScript'],
       category: 'Mobile',
       github: '#',
-      live: '#'
+      live: '#',
+      featured: false,
+      stats: { stars: 156, forks: 23, views: 890 }
     },
     {
+      id: 'ai-chatbot',
       title: 'AI Chat Bot',
-      description: 'An intelligent chatbot using OpenAI API with natural language processing capabilities and conversation memory.',
-      image: '/placeholder.svg',
-      technologies: ['Python', 'OpenAI', 'FastAPI', 'PostgreSQL'],
+      description: 'An intelligent chatbot using OpenAI API with natural language processing capabilities, conversation memory, and multi-language support.',
+      image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=500&h=300&fit=crop',
+      technologies: ['Python', 'OpenAI', 'FastAPI', 'PostgreSQL', 'Docker'],
       category: 'AI',
       github: '#',
-      live: '#'
+      live: '#',
+      featured: true,
+      stats: { stars: 389, forks: 78, views: 2100 }
     },
     {
+      id: 'weather-dashboard',
       title: 'Weather Dashboard',
-      description: 'A responsive weather application with location-based forecasts, interactive maps, and historical data visualization.',
-      image: '/placeholder.svg',
-      technologies: ['Vue.js', 'D3.js', 'Weather API'],
+      description: 'A responsive weather application with location-based forecasts, interactive maps, historical data visualization, and weather alerts.',
+      image: 'https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=500&h=300&fit=crop',
+      technologies: ['Vue.js', 'D3.js', 'Weather API', 'Tailwind CSS'],
       category: 'Web',
       github: '#',
-      live: '#'
+      live: '#',
+      featured: false,
+      stats: { stars: 112, forks: 34, views: 670 }
     },
     {
+      id: 'crypto-tracker',
       title: 'Crypto Portfolio Tracker',
-      description: 'Real-time cryptocurrency portfolio tracking with price alerts, charts, and portfolio analytics.',
-      image: '/placeholder.svg',
-      technologies: ['React', 'Chart.js', 'CoinGecko API'],
+      description: 'Real-time cryptocurrency portfolio tracking with price alerts, advanced charts, portfolio analytics, and market news integration.',
+      image: 'https://images.unsplash.com/photo-1640340434855-6084b1f4901c?w=500&h=300&fit=crop',
+      technologies: ['React', 'Chart.js', 'CoinGecko API', 'WebSocket'],
       category: 'Web',
       github: '#',
-      live: '#'
+      live: '#',
+      featured: true,
+      stats: { stars: 445, forks: 89, views: 3200 }
     },
     {
+      id: 'fitness-tracker',
       title: 'Fitness Tracker',
-      description: 'Mobile app for tracking workouts, nutrition, and progress with social features and achievement system.',
-      image: '/placeholder.svg',
-      technologies: ['Flutter', 'Firebase', 'HealthKit'],
+      description: 'Mobile app for tracking workouts, nutrition, and progress with social features, achievement system, and personal trainer integration.',
+      image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500&h=300&fit=crop',
+      technologies: ['Flutter', 'Firebase', 'HealthKit', 'Dart'],
       category: 'Mobile',
       github: '#',
-      live: '#'
+      live: '#',
+      featured: false,
+      stats: { stars: 203, forks: 45, views: 1100 }
     }
   ];
 
@@ -69,6 +88,9 @@ const Projects = () => {
   const filteredProjects = activeFilter === 'All' 
     ? projects 
     : projects.filter(project => project.category === activeFilter);
+
+  const featuredProjects = filteredProjects.filter(project => project.featured);
+  const regularProjects = filteredProjects.filter(project => !project.featured);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -87,6 +109,93 @@ const Projects = () => {
     return () => observer.disconnect();
   }, []);
 
+  const ProjectCard = ({ project, index, isFeatured = false }: { project: any; index: number; isFeatured?: boolean }) => (
+    <div
+      className={`relative overflow-hidden rounded-lg transition-all duration-300 hover:scale-105 group ${
+        isFeatured 
+          ? 'md:col-span-2 bg-gradient-to-br from-gray-800/60 to-gray-900/60' 
+          : 'bg-gray-800/50'
+      } backdrop-blur-sm border border-gray-700 hover:border-cyan-400/50 hover:shadow-lg hover:shadow-cyan-500/10`}
+      style={{ animationDelay: `${index * 100}ms` }}
+      onMouseEnter={() => setHoveredProject(project.id)}
+      onMouseLeave={() => setHoveredProject(null)}
+    >
+      <div className="relative overflow-hidden">
+        <img 
+          src={project.image} 
+          alt={project.title}
+          className={`w-full object-cover group-hover:scale-110 transition-transform duration-500 ${
+            isFeatured ? 'h-64' : 'h-48'
+          }`}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-60"></div>
+        
+        {/* Hover Overlay */}
+        <div className={`absolute inset-0 bg-black/60 flex items-center justify-center transition-opacity duration-300 ${
+          hoveredProject === project.id ? 'opacity-100' : 'opacity-0'
+        }`}>
+          <div className="flex space-x-4">
+            <a 
+              href={project.github}
+              className="bg-gray-900/90 p-3 rounded-full hover:bg-cyan-500 transition-colors transform hover:scale-110"
+            >
+              <Github size={20} />
+            </a>
+            <a 
+              href={project.live}
+              className="bg-gray-900/90 p-3 rounded-full hover:bg-purple-500 transition-colors transform hover:scale-110"
+            >
+              <ExternalLink size={20} />
+            </a>
+          </div>
+        </div>
+
+        {/* Featured Badge */}
+        {isFeatured && (
+          <div className="absolute top-4 left-4 bg-gradient-to-r from-cyan-400 to-purple-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+            Featured
+          </div>
+        )}
+
+        {/* Project Stats */}
+        <div className="absolute bottom-4 right-4 flex space-x-2">
+          <div className="bg-gray-900/80 px-2 py-1 rounded-full text-xs text-gray-300 flex items-center">
+            <Star size={12} className="mr-1" />
+            {project.stats.stars}
+          </div>
+          <div className="bg-gray-900/80 px-2 py-1 rounded-full text-xs text-gray-300 flex items-center">
+            <GitFork size={12} className="mr-1" />
+            {project.stats.forks}
+          </div>
+          <div className="bg-gray-900/80 px-2 py-1 rounded-full text-xs text-gray-300 flex items-center">
+            <Eye size={12} className="mr-1" />
+            {project.stats.views}
+          </div>
+        </div>
+      </div>
+      
+      <div className={`p-6 ${isFeatured ? 'space-y-4' : 'space-y-3'}`}>
+        <h3 className={`font-semibold text-white ${isFeatured ? 'text-2xl' : 'text-xl'}`}>
+          {project.title}
+        </h3>
+        <p className={`text-gray-300 ${isFeatured ? 'text-base' : 'text-sm'}`}>
+          {project.description}
+        </p>
+        
+        <div className="flex flex-wrap gap-2">
+          {project.technologies.map((tech: string) => (
+            <span
+              key={tech}
+              className="bg-gray-700/50 text-cyan-400 px-2 py-1 rounded-full text-xs border border-gray-600"
+            >
+              {tech}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <section id="projects" ref={sectionRef} className="py-20 relative z-10">
       <div className="container mx-auto px-6">
@@ -104,9 +213,9 @@ const Projects = () => {
                 <button
                   key={filter}
                   onClick={() => setActiveFilter(filter)}
-                  className={`px-4 py-2 rounded-lg transition-all duration-300 ${
+                  className={`px-6 py-2 rounded-lg transition-all duration-300 ${
                     activeFilter === filter
-                      ? 'bg-gradient-to-r from-cyan-400 to-purple-500 text-white'
+                      ? 'bg-gradient-to-r from-cyan-400 to-purple-500 text-white shadow-lg'
                       : 'text-gray-400 hover:text-white hover:bg-gray-700'
                   }`}
                 >
@@ -116,55 +225,29 @@ const Projects = () => {
             </div>
           </div>
 
-          {/* Projects Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredProjects.map((project, index) => (
-              <div
-                key={project.title}
-                className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-lg overflow-hidden hover:border-cyan-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/10 hover:scale-105 group"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <div className="relative overflow-hidden">
-                  <img 
-                    src={project.image} 
-                    alt={project.title}
-                    className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-60"></div>
-                  <div className="absolute top-4 right-4 flex space-x-2">
-                    <a 
-                      href={project.github}
-                      className="bg-gray-900/80 p-2 rounded-full hover:bg-cyan-500 transition-colors"
-                    >
-                      <Github size={16} />
-                    </a>
-                    <a 
-                      href={project.live}
-                      className="bg-gray-900/80 p-2 rounded-full hover:bg-purple-500 transition-colors"
-                    >
-                      <ExternalLink size={16} />
-                    </a>
-                  </div>
-                </div>
-                
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold mb-2 text-white">{project.title}</h3>
-                  <p className="text-gray-300 mb-4 text-sm">{project.description}</p>
-                  
-                  <div className="flex flex-wrap gap-2">
-                    {project.technologies.map((tech) => (
-                      <span
-                        key={tech}
-                        className="bg-gray-700 text-cyan-400 px-2 py-1 rounded-full text-xs"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+          {/* Featured Projects */}
+          {featuredProjects.length > 0 && (
+            <div className="mb-12">
+              <h3 className="text-2xl font-semibold mb-8 text-white">⭐ Featured Projects</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {featuredProjects.map((project, index) => (
+                  <ProjectCard key={project.id} project={project} index={index} isFeatured={true} />
+                ))}
               </div>
-            ))}
-          </div>
+            </div>
+          )}
+
+          {/* Regular Projects */}
+          {regularProjects.length > 0 && (
+            <div>
+              <h3 className="text-2xl font-semibold mb-8 text-white">🚀 Other Projects</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {regularProjects.map((project, index) => (
+                  <ProjectCard key={project.id} project={project} index={index + featuredProjects.length} />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </section>
