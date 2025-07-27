@@ -92,6 +92,27 @@
   input, textarea {
     @apply text-base; /* Prevent zoom on iOS */
   }
+  
+  /* Better mobile navigation */
+  nav {
+    @apply mx-2;
+  }
+  
+  /* Improve button spacing on mobile */
+  .flex-col button {
+    @apply w-full;
+  }
+}
+
+/* Medium screens */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .container {
+    @apply px-6;
+  }
+  
+  section {
+    @apply py-16;
+  }
 }
 
 /* Smooth scrolling for all browsers */
@@ -133,4 +154,30 @@ spline-viewer .spline-watermark {
 /* Additional styles to ensure Spline logo is hidden */
 spline-viewer div[style*="position: absolute"][style*="bottom: 16px"][style*="right: 16px"] {
   display: none !important;
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 768px) {
+  /* Improve touch interactions */
+  .hover\:scale-105:hover {
+    transform: scale(1.02);
+  }
+  
+  /* Better mobile spacing */
+  .space-y-4 > * + * {
+    margin-top: 1rem;
+  }
+  
+  /* Improved mobile typography */
+  h1 {
+    line-height: 1.1;
+  }
+  
+  h2 {
+    line-height: 1.2;
+  }
+  
+  p {
+    line-height: 1.6;
+  }
 }

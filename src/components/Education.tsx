@@ -93,77 +93,122 @@ const Education = () => {
   }, []);
 
   return (
-    <section id="education" ref={sectionRef} className="py-20 relative z-10">
-      <div className="container mx-auto px-6">
+    <section id="education" ref={sectionRef} className="py-16 sm:py-20 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6">
         <div className={`transition-all duration-1000 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}>
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-12 sm:mb-16 bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
             Education & Certifications
           </h2>
           
           {/* Education Timeline */}
-          <div className="mb-20">
-            <h3 className="text-2xl font-semibold mb-12 text-white text-center">Educational Journey</h3>
+          <div className="mb-16 sm:mb-20">
+            <h3 className="text-xl sm:text-2xl font-semibold mb-8 sm:mb-12 text-white text-center">Educational Journey</h3>
             <div className="relative">
-              {/* Timeline Line */}
-              <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-cyan-400 to-purple-500 rounded-full"></div>
+              {/* Timeline Line - Hidden on mobile */}
+              <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-cyan-400 to-purple-500 rounded-full hidden md:block"></div>
               
-              {education.map((edu, index) => (
-                <div
-                  key={index}
-                  className={`timeline-item relative flex items-center mb-12 ${
-                    index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'
-                  } ${
-                    visibleItems.includes(index) 
-                      ? 'opacity-100 translate-y-0' 
-                      : 'opacity-0 translate-y-10'
-                  } transition-all duration-700`}
-                  data-index={index}
-                  style={{ transitionDelay: `${index * 200}ms` }}
-                >
-                  {/* Timeline Node */}
-                  <div className="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-gradient-to-r from-cyan-400 to-purple-500 rounded-full border-4 border-gray-900 z-10"></div>
-                  
-                  {/* Content Card */}
-                  <div className={`w-5/12 ${index % 2 === 0 ? 'mr-auto pr-8' : 'ml-auto pl-8'}`}>
-                    <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-lg p-6 hover:border-cyan-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/10">
-                      <div className="flex items-start justify-between mb-4">
-                        <div>
-                          <h4 className="text-xl font-semibold text-white mb-2">{edu.degree}</h4>
-                          <p className="text-cyan-400 font-medium">{edu.institution}</p>
+              {/* Mobile Timeline */}
+              <div className="md:hidden space-y-8">
+                {education.map((edu, index) => (
+                  <div
+                    key={index}
+                    className={`timeline-item bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-lg p-6 hover:border-cyan-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/10 ${
+                      visibleItems.includes(index) 
+                        ? 'opacity-100 translate-y-0' 
+                        : 'opacity-0 translate-y-10'
+                    }`}
+                    data-index={index}
+                    style={{ transitionDelay: `${index * 200}ms` }}
+                  >
+                    <div className="flex items-start justify-between mb-4 flex-wrap gap-2">
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-lg sm:text-xl font-semibold text-white mb-2">{edu.degree}</h4>
+                        <p className="text-cyan-400 font-medium text-sm sm:text-base">{edu.institution}</p>
+                      </div>
+                      <div className="text-right text-sm">
+                        <div className="flex items-center text-gray-400 mb-1">
+                          <Calendar size={14} className="mr-1" />
+                          {edu.period}
                         </div>
-                        <div className="text-right">
-                          <div className="flex items-center text-gray-400 mb-1">
-                            <Calendar size={16} className="mr-1" />
-                            {edu.period}
-                          </div>
-                          <div className="flex items-center text-gray-400">
-                            <MapPin size={16} className="mr-1" />
-                            {edu.location}
-                          </div>
+                        <div className="flex items-center text-gray-400">
+                          <MapPin size={14} className="mr-1" />
+                          {edu.location}
                         </div>
                       </div>
-                      <p className="text-gray-300 mb-3">{edu.description}</p>
-                      <div className="text-sm text-green-400 mb-3">GPA: {edu.gpa}</div>
-                      <div className="flex flex-wrap gap-2">
-                        {edu.achievements.map((achievement, i) => (
-                          <span key={i} className="bg-purple-600/20 text-purple-300 px-2 py-1 rounded-full text-xs">
-                            {achievement}
-                          </span>
-                        ))}
+                    </div>
+                    <p className="text-gray-300 mb-3 text-sm sm:text-base">{edu.description}</p>
+                    <div className="text-sm text-green-400 mb-3">GPA: {edu.gpa}</div>
+                    <div className="flex flex-wrap gap-2">
+                      {edu.achievements.map((achievement, i) => (
+                        <span key={i} className="bg-purple-600/20 text-purple-300 px-2 py-1 rounded-full text-xs">
+                          {achievement}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Desktop Timeline */}
+              <div className="hidden md:block">
+                {education.map((edu, index) => (
+                  <div
+                    key={index}
+                    className={`timeline-item relative flex items-center mb-12 ${
+                      index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'
+                    } ${
+                      visibleItems.includes(index) 
+                        ? 'opacity-100 translate-y-0' 
+                        : 'opacity-0 translate-y-10'
+                    } transition-all duration-700`}
+                    data-index={index}
+                    style={{ transitionDelay: `${index * 200}ms` }}
+                  >
+                    {/* Timeline Node */}
+                    <div className="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-gradient-to-r from-cyan-400 to-purple-500 rounded-full border-4 border-gray-900 z-10"></div>
+                    
+                    {/* Content Card */}
+                    <div className={`w-5/12 ${index % 2 === 0 ? 'mr-auto pr-8' : 'ml-auto pl-8'}`}>
+                      <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-lg p-6 hover:border-cyan-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/10">
+                        <div className="flex items-start justify-between mb-4">
+                          <div>
+                            <h4 className="text-xl font-semibold text-white mb-2">{edu.degree}</h4>
+                            <p className="text-cyan-400 font-medium">{edu.institution}</p>
+                          </div>
+                          <div className="text-right">
+                            <div className="flex items-center text-gray-400 mb-1">
+                              <Calendar size={16} className="mr-1" />
+                              {edu.period}
+                            </div>
+                            <div className="flex items-center text-gray-400">
+                              <MapPin size={16} className="mr-1" />
+                              {edu.location}
+                            </div>
+                          </div>
+                        </div>
+                        <p className="text-gray-300 mb-3">{edu.description}</p>
+                        <div className="text-sm text-green-400 mb-3">GPA: {edu.gpa}</div>
+                        <div className="flex flex-wrap gap-2">
+                          {edu.achievements.map((achievement, i) => (
+                            <span key={i} className="bg-purple-600/20 text-purple-300 px-2 py-1 rounded-full text-xs">
+                              {achievement}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* Certifications */}
-          <div>
-            <h3 className="text-2xl font-semibold mb-8 text-white text-center">Professional Certifications</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Certifications - Without wave background */}
+          <div className="bg-gray-900/30 backdrop-blur-sm rounded-2xl p-6 sm:p-8">
+            <h3 className="text-xl sm:text-2xl font-semibold mb-6 sm:mb-8 text-white text-center">Professional Certifications</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
               {certifications.map((cert, index) => (
                 <div
                   key={index}
@@ -174,19 +219,19 @@ const Education = () => {
                     <img 
                       src={cert.image} 
                       alt={cert.name}
-                      className="w-full h-32 object-cover group-hover:scale-110 transition-transform duration-300"
+                      className="w-full h-24 sm:h-32 object-cover group-hover:scale-110 transition-transform duration-300"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-60"></div>
                     <div className="absolute top-2 right-2">
-                      <ExternalLink size={16} className="text-white" />
+                      <ExternalLink size={14} className="text-white" />
                     </div>
                   </div>
-                  <div className="p-4">
+                  <div className="p-3 sm:p-4">
                     <div className="flex items-center mb-2">
-                      <Award className="text-purple-400 mr-2" size={16} />
+                      <Award className="text-purple-400 mr-2" size={14} />
                       <span className="text-purple-400 text-xs">{cert.date}</span>
                     </div>
-                    <h4 className="text-white font-medium mb-1 text-sm">{cert.name}</h4>
+                    <h4 className="text-white font-medium mb-1 text-xs sm:text-sm">{cert.name}</h4>
                     <p className="text-gray-400 text-xs mb-2">{cert.issuer}</p>
                     <p className="text-gray-500 text-xs">ID: {cert.credentialId}</p>
                   </div>
