@@ -116,3 +116,21 @@ html {
 ::-webkit-scrollbar-thumb:hover {
   background: #4b5563;
 }
+
+/* Hide Spline logo and watermark */
+spline-viewer {
+  --spline-logo-display: none !important;
+}
+
+spline-viewer::part(logo) {
+  display: none !important;
+}
+
+spline-viewer .spline-watermark {
+  display: none !important;
+}
+
+/* Additional styles to ensure Spline logo is hidden */
+spline-viewer div[style*="position: absolute"][style*="bottom: 16px"][style*="right: 16px"] {
+  display: none !important;
+}

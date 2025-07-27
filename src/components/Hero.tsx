@@ -28,6 +28,25 @@ const Hero = () => {
     script.src = 'https://unpkg.com/@splinetool/viewer@1.10.37/build/spline-viewer.js';
     document.head.appendChild(script);
 
+    // Hide Spline logo
+    const hideSplineLogo = () => {
+      const style = document.createElement('style');
+      style.textContent = `
+        spline-viewer {
+          --spline-logo-display: none !important;
+        }
+        spline-viewer::part(logo) {
+          display: none !important;
+        }
+        spline-viewer .spline-watermark {
+          display: none !important;
+        }
+      `;
+      document.head.appendChild(style);
+    };
+
+    setTimeout(hideSplineLogo, 1000);
+
     return () => {
       document.head.removeChild(script);
     };
@@ -55,7 +74,7 @@ const Hero = () => {
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center relative z-10 px-4">
+    <section className="min-h-screen flex items-center justify-center relative z-10 px-4 pt-20">
       <div className="container mx-auto">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left Content */}
@@ -123,10 +142,14 @@ const Hero = () => {
           </div>
 
           {/* Right 3D Element */}
-          <div className="order-1 lg:order-2 h-64 sm:h-80 lg:h-96 w-full">
+          <div className="order-1 lg:order-2 h-64 sm:h-80 lg:h-96 xl:h-[500px] w-full relative">
             <spline-viewer 
               url="https://prod.spline.design/KKPBaJtUfSmPEKzP/scene.splinecode"
               className="w-full h-full rounded-lg"
+              style={{ 
+                transform: 'scale(1.2)',
+                transformOrigin: 'center',
+              }}
             />
           </div>
         </div>
