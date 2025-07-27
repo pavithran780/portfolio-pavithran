@@ -12,6 +12,14 @@
     @apply bg-background text-foreground;
     font-family: 'Inter', sans-serif;
   }
+  
+  /* Improve touch targets for mobile */
+  @media (max-width: 768px) {
+    button, a {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
 }
 
 @layer utilities {
@@ -29,6 +37,14 @@
   
   .animate-delay-2000 {
     animation-delay: 2s;
+  }
+  
+  /* Line clamp utility for project descriptions */
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
   
   @keyframes fadeIn {
@@ -59,4 +75,44 @@
   .timeline-item {
     @apply transform transition-all duration-700 ease-out;
   }
+}
+
+/* Responsive improvements */
+@media (max-width: 640px) {
+  .container {
+    @apply px-4;
+  }
+  
+  /* Adjust spacing for mobile */
+  section {
+    @apply py-12;
+  }
+  
+  /* Improve form inputs on mobile */
+  input, textarea {
+    @apply text-base; /* Prevent zoom on iOS */
+  }
+}
+
+/* Smooth scrolling for all browsers */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #374151;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4b5563;
 }
