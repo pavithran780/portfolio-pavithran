@@ -205,8 +205,8 @@ const Education = () => {
             </div>
           </div>
 
-          {/* Certifications - Without wave background */}
-          <div className="bg-gray-900/30 backdrop-blur-sm rounded-2xl p-6 sm:p-8">
+          {/* Certifications - Clean section without wave background */}
+          <div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-6 sm:p-8 border border-gray-700">
             <h3 className="text-xl sm:text-2xl font-semibold mb-6 sm:mb-8 text-white text-center">Professional Certifications</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
               {certifications.map((cert, index) => (
