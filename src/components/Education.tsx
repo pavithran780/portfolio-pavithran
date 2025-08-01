@@ -2,8 +2,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Calendar, MapPin, Award, ExternalLink } from 'lucide-react';
 import { GlowingCards, GlowingCard } from './GlowingCard';
-import { ScrollTimeline } from './ScrollTimeline';
-import { TeamCarousel } from './TeamCarousel';
 
 const Education = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -85,40 +83,81 @@ const Education = () => {
             Education & Certifications
           </h2>
           
-          {/* Educational Journey with ScrollTimeline */}
+          {/* Educational Journey with Smooth Animation */}
           <div className="mb-16 sm:mb-20">
-            <ScrollTimeline
-              events={educationEvents}
-              title="Educational Journey"
-              subtitle="Scroll to explore my academic path"
-              cardAlignment="alternating"
-              progressIndicator={true}
-              revealAnimation="slide"
-              cardEffect="glow"
-              darkMode={true}
-              className="bg-transparent"
-            />
+            <h3 className="text-2xl font-bold text-center mb-8 text-cyan-400">Educational Journey</h3>
+            <div className="relative max-w-4xl mx-auto">
+              {/* Timeline Line */}
+              <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-cyan-400 to-purple-500 rounded-full"></div>
+              
+              {educationEvents.map((event, index) => (
+                <div
+                  key={event.id}
+                  className={`relative flex items-center mb-12 ${
+                    index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'
+                  }`}
+                >
+                  {/* Timeline Node */}
+                  <div className="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-cyan-400 rounded-full border-4 border-gray-900 z-10"></div>
+                  
+                  {/* Content Card */}
+                  <div className={`w-5/12 ${index % 2 === 0 ? 'pr-8 text-right' : 'pl-8'}`}>
+                    <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700 hover:border-cyan-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-400/20">
+                      <div className="flex items-center mb-2 justify-start">
+                        {event.icon}
+                        <span className="text-sm font-bold text-cyan-400">{event.year}</span>
+                      </div>
+                      <h4 className="text-xl font-bold mb-1 text-white">{event.title}</h4>
+                      <p className="text-cyan-400 font-medium mb-2">{event.subtitle}</p>
+                      <p className="text-gray-300 text-sm">{event.description}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
-          {/* Professional Certifications with TeamCarousel */}
-          <div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-6 sm:p-8 border border-gray-700">
-            <TeamCarousel
-              members={certifications}
-              title="Professional Certifications"
-              titleColor="rgba(34, 211, 238, 1)"
-              titleSize="lg"
-              cardWidth={280}
-              cardHeight={300}
-              autoPlay={4000}
-              pauseOnHover={true}
-              showArrows={true}
-              showDots={true}
-              infoPosition="none"
-              grayscaleEffect={true}
-              sideCardScale={0.85}
-              sideCardOpacity={0.7}
-              className="bg-transparent"
-            />
+          {/* Professional Certifications with Proper Padding and Card Sizing */}
+          <div className="px-4">
+            <h3 className="text-2xl font-bold text-center mb-8 text-cyan-400">Professional Certifications</h3>
+            <div className="max-w-6xl mx-auto">
+              <GlowingCards
+                enableGlow={true}
+                glowRadius={20}
+                glowOpacity={0.8}
+                gap="1.5rem"
+                padding="2rem"
+                className="bg-transparent"
+              >
+                {certifications.map((cert) => (
+                  <GlowingCard
+                    key={cert.id}
+                    glowColor={
+                      cert.id === 'aws' ? '#ff9900' :
+                      cert.id === 'gcp' ? '#4285f4' :
+                      cert.id === 'mongodb' ? '#47a248' :
+                      '#61dafb'
+                    }
+                    className="w-full sm:w-64 h-80 bg-gray-800/50 backdrop-blur-sm border border-gray-700 hover:border-cyan-400/50 transition-all duration-300"
+                  >
+                    <div className="h-full flex flex-col">
+                      <img
+                        src={cert.image}
+                        alt={cert.name}
+                        className="w-full h-32 object-cover rounded-t-lg mb-4"
+                      />
+                      <div className="flex-1 flex flex-col justify-between">
+                        <div>
+                          <h4 className="text-white font-semibold mb-2 text-sm">{cert.name}</h4>
+                          <p className="text-gray-400 text-xs mb-3">{cert.role}</p>
+                        </div>
+                        <p className="text-gray-500 text-xs">{cert.bio}</p>
+                      </div>
+                    </div>
+                  </GlowingCard>
+                ))}
+              </GlowingCards>
+            </div>
           </div>
         </div>
       </div>
