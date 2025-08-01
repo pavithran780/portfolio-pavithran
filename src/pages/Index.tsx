@@ -8,6 +8,10 @@ import Projects from '../components/Projects';
 import Contact from '../components/Contact';
 import Footer from '../components/Footer';
 import ParticleBackground from '../components/ParticleBackground';
+import ParticlesAbout from '../components/ParticlesAbout';
+import ParticlesSkills from '../components/ParticlesSkills';
+import ParticlesProjects from '../components/ParticlesProjects';
+import ParticlesContact from '../components/ParticlesContact';
 import GradientBackground from '../components/GradientBackground';
 import FloatingShapes from '../components/FloatingShapes';
 import WaveBackground from '../components/WaveBackground';
@@ -20,21 +24,30 @@ const Index = () => {
     <div className="min-h-screen bg-gray-900 text-white overflow-x-hidden">
       <Navigation />
       
-      {/* Hero Section with Particle Background */}
+      {/* Hero Section with Original Particle Background */}
       <div className="relative">
-        <ParticleBackground />
+        <ParticleBackground 
+          id="particles-hero"
+          colors={['#00f0ff', '#8b5cf6', '#06b6d4']}
+          size={3}
+          countDesktop={60}
+          countTablet={50}
+          countMobile={40}
+        />
         <Hero />
       </div>
       
-      {/* About Section with Gradient Background */}
+      {/* About Section with Particles + Gradient Background */}
       <div className="relative">
         <GradientBackground />
+        <ParticlesAbout />
         <About />
       </div>
       
-      {/* Skills Section with Floating Shapes */}
+      {/* Skills Section with Particles + Floating Shapes */}
       <div className="relative">
         <FloatingShapes />
+        <ParticlesSkills />
         <Skills />
       </div>
       
@@ -44,15 +57,17 @@ const Index = () => {
         <Education />
       </div>
       
-      {/* Projects Section with Geometric Background */}
+      {/* Projects Section with Particles + Geometric Background */}
       <div className="relative">
         <GeometricBackground />
+        <ParticlesProjects />
         <Projects />
       </div>
       
-      {/* Contact Section with Dot Matrix */}
+      {/* Contact Section with Particles + Dot Matrix */}
       <div className="relative">
         <DotMatrix />
+        <ParticlesContact />
         <Contact />
       </div>
       

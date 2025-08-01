@@ -1,103 +1,186 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useLayoutEffect } from 'react';
 
-const ParticleBackground = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+interface ParticlesBackgroundProps {
+  colors?: string[];
+  size?: number;
+  countDesktop?: number;
+  countTablet?: number;
+  countMobile?: number;
+  zIndex?: number;
+  height?: string;
+  id?: string;
+}
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+const ParticlesBackground: React.FC<ParticlesBackgroundProps> = ({
+  colors = ['#00f0ff', '#8b5cf6', '#06b6d4'],
+  size = 3,
+  countDesktop = 60,
+  countTablet = 50,
+  countMobile = 40,
+  zIndex = 0,
+  height = '100vh',
+  id = 'js-particles',
+}) => {
+  useLayoutEffect(() => {
+    // Check if particles.js is already loaded
+    if (window.particlesJS) {
+      initializeParticles();
+      return;
+    }
 
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const particles: Array<{
-      x: number;
-      y: number;
-      dx: number;
-      dy: number;
-      size: number;
-      opacity: number;
-    }> = [];
-
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+    const script = document.createElement('script');
+    script.src = "https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js";
+    script.onload = () => {
+      initializeParticles();
     };
-
-    const createParticles = () => {
-      const particleCount = Math.floor((canvas.width * canvas.height) / 10000);
-      
-      for (let i = 0; i < particleCount; i++) {
-        particles.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          dx: (Math.random() - 0.5) * 0.5,
-          dy: (Math.random() - 0.5) * 0.5,
-          size: Math.random() * 2 + 1,
-          opacity: Math.random() * 0.5 + 0.2
-        });
-      }
-    };
-
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      particles.forEach((particle, index) => {
-        particle.x += particle.dx;
-        particle.y += particle.dy;
-        
-        if (particle.x < 0 || particle.x > canvas.width) particle.dx *= -1;
-        if (particle.y < 0 || particle.y > canvas.height) particle.dy *= -1;
-        
-        ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(0, 240, 255, ${particle.opacity})`;
-        ctx.fill();
-        
-        // Connect nearby particles
-        particles.forEach((otherParticle, otherIndex) => {
-          if (index !== otherIndex) {
-            const dx = particle.x - otherParticle.x;
-            const dy = particle.y - otherParticle.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            
-            if (distance < 100) {
-              ctx.beginPath();
-              ctx.moveTo(particle.x, particle.y);
-              ctx.lineTo(otherParticle.x, otherParticle.y);
-              ctx.strokeStyle = `rgba(0, 240, 255, ${0.1 * (1 - distance / 100)})`;
-              ctx.lineWidth = 0.5;
-              ctx.stroke();
-            }
-          }
-        });
-      });
-      
-      requestAnimationFrame(animate);
-    };
-
-    resizeCanvas();
-    createParticles();
-    animate();
-
-    window.addEventListener('resize', () => {
-      resizeCanvas();
-      particles.length = 0;
-      createParticles();
-    });
+    document.head.appendChild(script);
 
     return () => {
-      window.removeEventListener('resize', resizeCanvas);
+      // Clean up particles instance
+      if (window.pJSDom && window.pJSDom.length > 0) {
+        const particleInstance = window.pJSDom.find((instance: any) => 
+          instance.pJS.canvas.el.id === `${id}-canvas`
+        );
+        if (particleInstance) {
+          particleInstance.pJS.fn.vendors.destroypJS();
+        }
+      }
     };
-  }, []);
+  }, [colors, size, countDesktop, countTablet, countMobile, id]);
+
+  const initializeParticles = () => {
+    const particlesElement = document.getElementById(id);
+    if (particlesElement && window.particlesJS) {
+      const getParticleCount = () => {
+        const screenWidth = window.innerWidth;
+        if (screenWidth > 1024) return countDesktop;
+        if (screenWidth > 768) return countTablet;
+        return countMobile;
+      };
+
+      window.particlesJS(id, {
+        particles: {
+          number: {
+            value: getParticleCount(),
+          },
+          color: {
+            value: colors,
+          },
+          shape: {
+            type: 'circle',
+          },
+          opacity: {
+            value: 0.8,
+            random: true,
+            anim: {
+              enable: true,
+              speed: 1,
+              opacity_min: 0.3,
+              sync: false
+            }
+          },
+          size: {
+            value: size,
+            random: true,
+            anim: {
+              enable: true,
+              speed: 2,
+              size_min: 1,
+              sync: false
+            }
+          },
+          line_linked: {
+            enable: false,
+          },
+          move: {
+            enable: true,
+            speed: 1.5,
+            direction: 'none',
+            random: true,
+            straight: false,
+            out_mode: 'out',
+            bounce: false,
+          },
+        },
+        interactivity: {
+          detect_on: 'canvas',
+          events: {
+            onhover: {
+              enable: true,
+              mode: 'repulse'
+            },
+            onclick: {
+              enable: true,
+              mode: 'push'
+            },
+            resize: true,
+          },
+          modes: {
+            repulse: {
+              distance: 100,
+              duration: 0.4
+            },
+            push: {
+              particles_nb: 4
+            }
+          }
+        },
+        retina_detect: true,
+      });
+    }
+  };
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="fixed top-0 left-0 w-full h-full pointer-events-none z-0"
-    />
+    <div
+      id={id}
+      style={{
+        width: '100%',
+        height: height,
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        zIndex: zIndex,
+        pointerEvents: 'none',
+      }}
+    >
+      <style>{`
+        #${id} canvas {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+        }
+
+        .particles-js-canvas-el {
+          position: absolute;
+        }
+
+        .particles-js-canvas-el circle {
+          fill: currentColor;
+          filter: url(#glow-${id});
+        }
+      `}</style>
+      <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+        <defs>
+          <filter id={`glow-${id}`}>
+            <feGaussianBlur stdDeviation="2.5" result="coloredBlur" />
+            <feMerge>
+              <feMergeNode in="coloredBlur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+      </svg>
+    </div>
   );
 };
 
-export default ParticleBackground;
+// Declare global types for particles.js
+declare global {
+  interface Window {
+    particlesJS: any;
+    pJSDom: any[];
+  }
+}
+
+export default ParticlesBackground;
