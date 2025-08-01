@@ -11,8 +11,6 @@ import { cn } from "../lib/utils";
 import { Card, CardContent } from "./ui/card";
 import { Calendar } from "lucide-react";
 
-<lov-add-dependency>framer-motion@latest</lov-add-dependency>
-
 export interface TimelineEvent {
   id?: string;
   year: string;
@@ -363,31 +361,38 @@ export const ScrollTimeline = ({
                     viewport={{ once: false, margin: "-100px" }}
                     style={parallaxIntensity > 0 ? { y: yOffset } : undefined}
                   >
-                    <Card className="bg-gray-800/50 backdrop-blur-sm border-gray-700">
+                    <Card className="bg-background border">
                       <CardContent className="p-6">
                         {dateFormat === "badge" ? (
                           <div className="flex items-center mb-2">
                             {event.icon || (
-                              <Calendar className="h-4 w-4 mr-2 text-cyan-400" />
+                              <Calendar className="h-4 w-4 mr-2 text-primary" />
                             )}
-                            <span className="text-sm font-bold text-cyan-400">
+                            <span
+                              className={cn(
+                                "text-sm font-bold",
+                                event.color
+                                  ? `text-${event.color}`
+                                  : "text-primary"
+                              )}
+                            >
                               {event.year}
                             </span>
                           </div>
                         ) : (
-                          <p className="text-lg font-bold text-cyan-400 mb-2">
+                          <p className="text-lg font-bold text-primary mb-2">
                             {event.year}
                           </p>
                         )}
-                        <h3 className="text-xl font-bold mb-1 text-white">
+                        <h3 className="text-xl font-bold mb-1">
                           {event.title}
                         </h3>
                         {event.subtitle && (
-                          <p className="text-cyan-400 font-medium mb-2">
+                          <p className="text-muted-foreground font-medium mb-2">
                             {event.subtitle}
                           </p>
                         )}
-                        <p className="text-gray-300">
+                        <p className="text-muted-foreground">
                           {event.description}
                         </p>
                       </CardContent>
