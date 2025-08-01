@@ -1,6 +1,6 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import { Calendar, MapPin, Award, ExternalLink } from 'lucide-react';
+import { GlowingCards, GlowingCard } from './GlowingCard';
 
 const Education = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -34,28 +34,32 @@ const Education = () => {
       issuer: 'Amazon Web Services',
       date: '2023',
       image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=300&h=200&fit=crop',
-      credentialId: 'AWS-SA-2023-001'
+      credentialId: 'AWS-SA-2023-001',
+      glowColor: '#ff9500'
     },
     {
       name: 'Google Cloud Professional Developer',
       issuer: 'Google Cloud',
       date: '2023',
       image: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=300&h=200&fit=crop',
-      credentialId: 'GCP-PD-2023-002'
+      credentialId: 'GCP-PD-2023-002',
+      glowColor: '#4285f4'
     },
     {
       name: 'MongoDB Certified Developer',
       issuer: 'MongoDB University',
       date: '2022',
       image: 'https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?w=300&h=200&fit=crop',
-      credentialId: 'MDB-DEV-2022-003'
+      credentialId: 'MDB-DEV-2022-003',
+      glowColor: '#47a248'
     },
     {
       name: 'React Developer Certification',
       issuer: 'Meta',
       date: '2022',
       image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=300&h=200&fit=crop',
-      credentialId: 'META-REACT-2022-004'
+      credentialId: 'META-REACT-2022-004',
+      glowColor: '#61dafb'
     }
   ];
 
@@ -205,39 +209,49 @@ const Education = () => {
             </div>
           </div>
 
-          {/* Certifications - Clean section without wave background */}
+          {/* Certifications with Glowing Cards */}
           <div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-6 sm:p-8 border border-gray-700">
             <h3 className="text-xl sm:text-2xl font-semibold mb-6 sm:mb-8 text-white text-center">Professional Certifications</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            
+            <GlowingCards
+              enableGlow={true}
+              glowRadius={20}
+              glowOpacity={0.8}
+              animationDuration={300}
+              gap="1.5rem"
+              maxWidth="100%"
+              padding="0"
+              responsive={true}
+            >
               {certifications.map((cert, index) => (
-                <div
+                <GlowingCard
                   key={index}
-                  className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-lg overflow-hidden hover:border-purple-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10 hover:scale-105 group"
-                  style={{ animationDelay: `${index * 150}ms` }}
+                  glowColor={cert.glowColor}
+                  className="bg-gray-800/50 backdrop-blur-sm border-gray-700 rounded-lg overflow-hidden min-w-[280px] max-w-[300px] p-0"
                 >
                   <div className="relative overflow-hidden">
                     <img 
                       src={cert.image} 
                       alt={cert.name}
-                      className="w-full h-24 sm:h-32 object-cover group-hover:scale-110 transition-transform duration-300"
+                      className="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-60"></div>
                     <div className="absolute top-2 right-2">
                       <ExternalLink size={14} className="text-white" />
                     </div>
                   </div>
-                  <div className="p-3 sm:p-4">
+                  <div className="p-4">
                     <div className="flex items-center mb-2">
                       <Award className="text-purple-400 mr-2" size={14} />
                       <span className="text-purple-400 text-xs">{cert.date}</span>
                     </div>
-                    <h4 className="text-white font-medium mb-1 text-xs sm:text-sm">{cert.name}</h4>
+                    <h4 className="text-white font-medium mb-1 text-sm">{cert.name}</h4>
                     <p className="text-gray-400 text-xs mb-2">{cert.issuer}</p>
                     <p className="text-gray-500 text-xs">ID: {cert.credentialId}</p>
                   </div>
-                </div>
+                </GlowingCard>
               ))}
-            </div>
+            </GlowingCards>
           </div>
         </div>
       </div>

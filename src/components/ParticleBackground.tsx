@@ -13,7 +13,7 @@ interface ParticlesBackgroundProps {
 }
 
 const ParticlesBackground: React.FC<ParticlesBackgroundProps> = ({
-  colors = ['#00f0ff', '#8b5cf6', '#06b6d4'],
+  colors = ['#ff223e', '#5d1eb2', '#ff7300'],
   size = 3,
   countDesktop = 60,
   countTablet = 50,
@@ -71,60 +71,36 @@ const ParticlesBackground: React.FC<ParticlesBackgroundProps> = ({
             type: 'circle',
           },
           opacity: {
-            value: 0.8,
-            random: true,
-            anim: {
-              enable: true,
-              speed: 1,
-              opacity_min: 0.3,
-              sync: false
-            }
+            value: 1,
+            random: false,
           },
           size: {
             value: size,
             random: true,
-            anim: {
-              enable: true,
-              speed: 2,
-              size_min: 1,
-              sync: false
-            }
           },
           line_linked: {
             enable: false,
           },
           move: {
             enable: true,
-            speed: 1.5,
+            speed: 2,
             direction: 'none',
             random: true,
             straight: false,
             out_mode: 'out',
-            bounce: false,
           },
         },
         interactivity: {
           detect_on: 'canvas',
           events: {
             onhover: {
-              enable: true,
-              mode: 'repulse'
+              enable: false,
             },
             onclick: {
-              enable: true,
-              mode: 'push'
+              enable: false,
             },
             resize: true,
           },
-          modes: {
-            repulse: {
-              distance: 100,
-              duration: 0.4
-            },
-            push: {
-              particles_nb: 4
-            }
-          }
         },
         retina_detect: true,
       });
@@ -163,7 +139,7 @@ const ParticlesBackground: React.FC<ParticlesBackgroundProps> = ({
       <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
         <defs>
           <filter id={`glow-${id}`}>
-            <feGaussianBlur stdDeviation="2.5" result="coloredBlur" />
+            <feGaussianBlur stdDeviation="3.5" result="coloredBlur" />
             <feMerge>
               <feMergeNode in="coloredBlur" />
               <feMergeNode in="SourceGraphic" />
