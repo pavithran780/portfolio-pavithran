@@ -5,10 +5,27 @@ import { Menu, X } from 'lucide-react';
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
+
+  const sections = ['about', 'skills', 'education', 'projects', 'contact'];
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 100);
+
+      // Check which section is currently in view
+      const currentSection = sections.find(section => {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          return rect.top <= 100 && rect.bottom >= 100;
+        }
+        return false;
+      });
+
+      if (currentSection) {
+        setActiveSection(currentSection);
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -21,6 +38,10 @@ const Navigation = () => {
       element.scrollIntoView({ behavior: 'smooth' });
     }
     setIsOpen(false);
+  };
+
+  const isActive = (section: string) => {
+    return activeSection === section.toLowerCase();
   };
 
   return (
@@ -39,10 +60,16 @@ const Navigation = () => {
               <button
                 key={item}
                 onClick={() => scrollToSection(item.toLowerCase())}
-                className="text-gray-300 hover:text-cyan-400 transition-all duration-300 relative group px-4 py-2 rounded-xl hover:bg-cyan-400/10 text-sm font-medium"
+                className={`transition-all duration-300 relative group px-4 py-2 rounded-xl text-sm font-medium ${
+                  isActive(item)
+                    ? 'text-cyan-400 bg-cyan-400/10'
+                    : 'text-gray-300 hover:text-cyan-400 hover:bg-cyan-400/10'
+                }`}
               >
                 {item}
-                <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-cyan-400 transition-all duration-300 group-hover:w-3/4 rounded-full"></span>
+                <span className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 h-0.5 bg-cyan-400 transition-all duration-300 rounded-full ${
+                  isActive(item) ? 'w-3/4' : 'w-0 group-hover:w-3/4'
+                }`}></span>
               </button>
             ))}
           </div>
@@ -64,7 +91,11 @@ const Navigation = () => {
                 <button
                   key={item}
                   onClick={() => scrollToSection(item.toLowerCase())}
-                  className="block w-full text-left text-gray-300 hover:text-cyan-400 transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-cyan-400/10 min-h-[44px] font-medium"
+                  className={`block w-full text-left transition-colors duration-300 py-3 px-4 rounded-xl min-h-[44px] font-medium ${
+                    isActive(item)
+                      ? 'text-cyan-400 bg-cyan-400/10'
+                      : 'text-gray-300 hover:text-cyan-400 hover:bg-cyan-400/10'
+                  }`}
                 >
                   {item}
                 </button>

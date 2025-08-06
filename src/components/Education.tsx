@@ -1,7 +1,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Calendar, MapPin, Award, ExternalLink } from 'lucide-react';
-import { GlowingCards, GlowingCard } from './GlowingCard';
 
 const Education = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -117,46 +116,27 @@ const Education = () => {
             </div>
           </div>
 
-          {/* Professional Certifications with Proper Padding and Card Sizing */}
+          {/* Professional Certifications - Simple Grid Layout */}
           <div className="px-4">
             <h3 className="text-2xl font-bold text-center mb-8 text-cyan-400">Professional Certifications</h3>
             <div className="max-w-6xl mx-auto">
-              <GlowingCards
-                enableGlow={true}
-                glowRadius={20}
-                glowOpacity={0.8}
-                gap="1.5rem"
-                padding="2rem"
-                className="bg-transparent"
-              >
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {certifications.map((cert) => (
-                  <GlowingCard
+                  <div
                     key={cert.id}
-                    glowColor={
-                      cert.id === 'aws' ? '#ff9900' :
-                      cert.id === 'gcp' ? '#4285f4' :
-                      cert.id === 'mongodb' ? '#47a248' :
-                      '#61dafb'
-                    }
-                    className="w-full sm:w-64 h-80 bg-gray-800/50 backdrop-blur-sm border border-gray-700 hover:border-cyan-400/50 transition-all duration-300"
+                    className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 hover:border-cyan-400/50 rounded-lg p-4 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-400/20"
                   >
-                    <div className="h-full flex flex-col">
-                      <img
-                        src={cert.image}
-                        alt={cert.name}
-                        className="w-full h-32 object-cover rounded-t-lg mb-4"
-                      />
-                      <div className="flex-1 flex flex-col justify-between">
-                        <div>
-                          <h4 className="text-white font-semibold mb-2 text-sm">{cert.name}</h4>
-                          <p className="text-gray-400 text-xs mb-3">{cert.role}</p>
-                        </div>
-                        <p className="text-gray-500 text-xs">{cert.bio}</p>
-                      </div>
-                    </div>
-                  </GlowingCard>
+                    <img
+                      src={cert.image}
+                      alt={cert.name}
+                      className="w-full h-32 object-cover rounded-lg mb-4"
+                    />
+                    <h4 className="text-white font-semibold mb-2 text-sm">{cert.name}</h4>
+                    <p className="text-gray-400 text-xs mb-3">{cert.role}</p>
+                    <p className="text-gray-500 text-xs">{cert.bio}</p>
+                  </div>
                 ))}
-              </GlowingCards>
+              </div>
             </div>
           </div>
         </div>
