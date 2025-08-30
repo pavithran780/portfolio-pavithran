@@ -1,6 +1,6 @@
-
 import React, { useEffect, useState } from 'react';
-import { ChevronDown, Github, Linkedin, Mail } from 'lucide-react';
+import { ChevronDown, Github, Linkedin, Mail, Download } from 'lucide-react';
+import { ConfettiButton } from './ui/confetti-button';
 
 // Declare the custom element for TypeScript
 declare global {
@@ -129,9 +129,22 @@ const Hero = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-4 opacity-0 animate-fade-in animate-delay-2000">
-              <button className="bg-gradient-to-r from-cyan-400 to-purple-500 text-white px-8 py-3 sm:py-4 rounded-lg hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 hover:scale-105 transform text-base sm:text-lg font-medium">
+              <ConfettiButton
+                variant="gradient"
+                size="lg"
+                animation="glow"
+                icon={<Download size={20} />}
+                iconPosition="left"
+                confettiOptions={{
+                  particleCount: 150,
+                  spread: 90,
+                  startVelocity: 45,
+                  colors: ['#00f0ff', '#8b5cf6', '#06b6d4', '#ffffff'],
+                }}
+                className="text-base sm:text-lg font-medium hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 hover:scale-105 transform"
+              >
                 Download CV
-              </button>
+              </ConfettiButton>
               <button 
                 onClick={scrollToAbout}
                 className="border border-cyan-400 text-cyan-400 px-8 py-3 sm:py-4 rounded-lg hover:bg-cyan-400/10 transition-all duration-300 hover:scale-105 transform text-base sm:text-lg font-medium"
